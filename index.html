@@ -32,6 +32,10 @@
       --blue-soft: #e8f0ff;
       --bright-blue: #12cdd4;
       --bright-pink: #ff3b69;
+      --cost-teal: #24b8c7;
+      --cost-berry: #e84f7a;
+      --cost-amber: #f2a23a;
+      --cost-violet: #9b7ef3;
       --shadow: 0 1px 2px rgba(17, 24, 39, .05), 0 12px 28px rgba(17, 24, 39, .06);
     }
 
@@ -59,7 +63,11 @@
       border-bottom: 1px solid var(--line);
     }
 
-    .brand-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .topbar > div:first-child {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .brand-row { display: flex; align-items: center; gap: 13px; margin-bottom: 16px; }
     .brand-mark {
       width: 36px;
       height: 36px;
@@ -80,13 +88,20 @@
     .eyebrow {
       margin: 0;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: .08em;
+      letter-spacing: .09em;
     }
-    h1 { margin: 0; font-size: clamp(26px, 4vw, 46px); line-height: 1; letter-spacing: 0; }
-    .subtitle { margin: 10px 0 0; max-width: 820px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+    h1 {
+      margin: 0;
+      max-width: 1020px;
+      font-size: clamp(30px, 3.35vw, 43px);
+      line-height: 1.02;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    .subtitle { margin: 18px 0 0; max-width: 980px; color: var(--muted); font-size: 14px; line-height: 1.65; }
 
     .toolbar {
       display: flex;
@@ -257,6 +272,65 @@
     .product-kpi-grid .kpi-note {
       min-height: 32px;
       font-size: 11px;
+    }
+    .product-structure-copy {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .concentration-bar {
+      display: grid;
+      grid-template-columns: var(--top10, 0%) var(--next10, 0%) var(--tail, 1fr);
+      height: 62px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45);
+    }
+    .concentration-segment {
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      color: #fff;
+      font: 800 18px/1 Calibri, Arial, sans-serif;
+      letter-spacing: 0;
+    }
+    .concentration-segment.top10 { background: var(--cost-teal, #24b8c7); }
+    .concentration-segment.next10 { background: var(--cost-violet, #9b7ef3); }
+    .concentration-segment.tail { background: var(--cost-amber, #f2a23a); color: #241708; }
+    .concentration-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .concentration-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 10px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .concentration-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--dot);
+    }
+    .structure-note {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
     }
     .affiliate-kpi-grid {
       grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1018,6 +1092,7 @@
     @media (max-width: 760px) {
       .app-shell { padding: 16px; }
       .topbar { display: block; }
+      h1 { white-space: normal; font-size: clamp(28px, 8vw, 38px); }
       .toolbar { justify-content: flex-start; min-width: 0; margin-top: 16px; }
       .kpi-grid, .section-grid { grid-template-columns: 1fr; }
       .product-kpi-grid {
@@ -2290,6 +2365,24 @@
         </article>
       </div>
       <section class="section-grid">
+        <article class="panel span-6">
+          <div class="panel-head">
+            <div><h2 id="productConcentrationTitle">Product Structure</h2><p class="panel-meta" id="productConcentrationMeta">GMV concentration across Top 10, next 10, and long-tail PIDs.</p></div>
+            <span class="tag cyan" id="productStructureTag">Concentration</span>
+          </div>
+          <p class="product-structure-copy" id="productConcentrationCopy">GMV split across Top 10, next 10, and long-tail PIDs.</p>
+          <div id="productConcentrationBar"></div>
+          <div class="concentration-summary" id="productConcentrationSummary"></div>
+        </article>
+        <article class="panel span-6">
+          <div class="panel-head">
+            <div><h2 id="newProductShareTitle">New Product Share Trend</h2><p class="panel-meta" id="newProductShareMeta">Monthly GMV share from new PIDs based on the old-item reference list.</p></div>
+            <span class="tag green" id="newProductShareTag">New SPUs</span>
+          </div>
+          <div class="chart-box compact"><canvas id="newProductShareChart"></canvas></div>
+        </article>
+      </section>
+      <section class="section-grid">
         <article class="panel span-12">
           <div class="panel-head">
             <div><h2 data-i18n="topProductsTitle">Top Products · PID Level</h2><p class="panel-meta" data-i18n="topProductsMeta">H1 GMV Top 15 with ad cost, commission, and marketing cost rate to avoid looking at sales alone.</p></div>
@@ -2555,10 +2648,10 @@
           </div>
         </article>
       </section>
-      <section class="section-grid">
+      <section class="section-grid" id="productYoySection">
         <article class="panel span-6">
           <div class="panel-head">
-            <div><h2 data-i18n="yoyFastestTitle">YoY Fastest Growth · H1 PID Level</h2><p class="panel-meta" data-i18n="yoyFastestMeta">Top H1 products ranked by absolute GMV increase versus 2025 H1, including new products.</p></div>
+            <div><h2 id="productYoyGrowthTitle" data-i18n="yoyFastestTitle">YoY Fastest Growth · H1 PID Level</h2><p class="panel-meta" id="productYoyGrowthMeta" data-i18n="yoyFastestMeta">Top H1 products ranked by absolute GMV increase versus 2025 H1, including new products.</p></div>
             <span class="tag green">YoY Top 10</span>
           </div>
           <div class="table-wrap">
@@ -2590,7 +2683,7 @@
         </article>
         <article class="panel span-6">
           <div class="panel-head">
-            <div><h2 data-i18n="yoyDeclinersTitle">YoY Biggest Decliners · H1 PID Level</h2><p class="panel-meta" data-i18n="yoyDeclinersMeta">Top H1 products ranked by absolute GMV decrease versus 2025 H1.</p></div>
+            <div><h2 id="productYoyDeclinersTitle" data-i18n="yoyDeclinersTitle">YoY Biggest Decliners · H1 PID Level</h2><p class="panel-meta" id="productYoyDeclinersMeta" data-i18n="yoyDeclinersMeta">Top H1 products ranked by absolute GMV decrease versus 2025 H1.</p></div>
             <span class="tag rose">YoY Bottom 10</span>
           </div>
           <div class="table-wrap">
@@ -3103,6 +3196,78 @@
       `).join("");
     }
 
+    function productStructureStats() {
+      const products = getProducts(realData.allProducts || realData.topProducts)
+        .filter(product => product.gmv > 0)
+        .sort((a, b) => b.gmv - a.gmv);
+      const totalGmv = sum(products.map(product => product.gmv));
+      const top10Gmv = sum(products.slice(0, 10).map(product => product.gmv));
+      const top20Gmv = sum(products.slice(0, 20).map(product => product.gmv));
+      const next10Gmv = Math.max(0, top20Gmv - top10Gmv);
+      const tailGmv = Math.max(0, totalGmv - top20Gmv);
+      const monthNewShares = realMonths.map((month, monthIndex) => {
+        const monthTotal = sum((realData.allProducts || realData.topProducts || []).map(product => valueAt(product.trend || [], monthIndex)));
+        const newGmv = sum((realData.allProducts || realData.topProducts || []).filter(product => product.isNew).map(product => valueAt(product.trend || [], monthIndex)));
+        return {
+          label: month.shortLabel || month.label,
+          value: pctOf(newGmv, monthTotal),
+          gmv: newGmv,
+        };
+      });
+      return {
+        products,
+        totalGmv,
+        top10Gmv,
+        next10Gmv,
+        tailGmv,
+        top10Share: pctOf(top10Gmv, totalGmv),
+        top20Share: pctOf(top20Gmv, totalGmv),
+        next10Share: pctOf(next10Gmv, totalGmv),
+        tailShare: pctOf(tailGmv, totalGmv),
+        monthNewShares,
+      };
+    }
+
+    function renderProductStructure() {
+      const stats = productStructureStats();
+      const periodLabel = selectedPeriod().label;
+      const title = document.getElementById("productConcentrationTitle");
+      const meta = document.getElementById("productConcentrationMeta");
+      const copy = document.getElementById("productConcentrationCopy");
+      const tag = document.getElementById("productStructureTag");
+      const note = document.getElementById("productConcentrationNote");
+      if (title) title.textContent = dashboardText("Product Structure", "产品结构");
+      if (meta) meta.textContent = dashboardText("GMV concentration across Top 10, next 10, and long-tail PIDs.", "GMV 按 Top 10、Top 11-20 和长尾 PID 的集中度拆分。");
+      if (copy) copy.textContent = dashboardText(`${periodLabel} GMV split across Top 10, next 10, and long-tail PIDs.`, `${periodLabel} GMV 按 Top 10、Top 11-20 和长尾 PID 拆分。`);
+      if (tag) tag.textContent = dashboardText("Concentration", "集中度");
+      if (note) note.textContent = "";
+      const bar = document.getElementById("productConcentrationBar");
+      if (bar) {
+        const top10 = Math.max(1, stats.top10Share);
+        const next10 = Math.max(1, stats.next10Share);
+        const tail = Math.max(1, stats.tailShare);
+        bar.innerHTML = `
+          <div class="concentration-bar" style="--top10:${top10}%;--next10:${next10}%;--tail:${tail}%">
+            <div class="concentration-segment top10">${stats.top10Share.toFixed(1)}%</div>
+            <div class="concentration-segment next10">${stats.next10Share.toFixed(1)}%</div>
+            <div class="concentration-segment tail">${stats.tailShare.toFixed(1)}%</div>
+          </div>
+        `;
+      }
+      const summary = document.getElementById("productConcentrationSummary");
+      if (summary) summary.innerHTML = [
+        { label: dashboardText("Top 10", "Top 10"), value: stats.top10Share, color: palette.costTeal },
+        { label: dashboardText("Top 20", "Top 20"), value: stats.top20Share, color: palette.costViolet },
+        { label: dashboardText("Long tail", "长尾"), value: stats.tailShare, color: palette.costAmber },
+      ].map(item => `<span class="concentration-pill" style="--dot:${item.color}">${item.label} ${item.value.toFixed(1)}%</span>`).join("");
+      const newTitle = document.getElementById("newProductShareTitle");
+      const newMeta = document.getElementById("newProductShareMeta");
+      const newTag = document.getElementById("newProductShareTag");
+      if (newTitle) newTitle.textContent = dashboardText("New Product Share Trend", "新品占比趋势");
+      if (newMeta) newMeta.textContent = dashboardText("Monthly GMV share from new PIDs, based on the old-item reference list.", "基于 old item 清单识别新品，展示每月新品 GMV 占比。");
+      if (newTag) newTag.textContent = dashboardText("New SPUs", "新品");
+    }
+
     function selectedAffiliateRows() {
       const rows = realData.affiliateMonthly || [];
       return selectedPeriod().indices.map(index => rows[index]).filter(Boolean);
@@ -3375,6 +3540,23 @@
     const percentLabelPlugin = {
       id: "percentLabelPlugin",
       afterDatasetsDraw(chart) {
+        if (chart.canvas.id === "newProductShareChart") {
+          const meta = chart.getDatasetMeta(0);
+          const dataset = chart.data.datasets[0];
+          const { ctx } = chart;
+          ctx.save();
+          ctx.font = "800 11px DM Mono, monospace";
+          ctx.fillStyle = palette.costTeal;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          meta.data.forEach((point, index) => {
+            const value = dataset.data[index];
+            if (!Number.isFinite(value)) return;
+            ctx.fillText(`${value.toFixed(1)}%`, point.x, point.y - 8);
+          });
+          ctx.restore();
+          return;
+        }
         const allowed = new Set(["sourceMixChart", "contentMixChart", "skuShareChart"]);
         if (!allowed.has(chart.canvas.id)) return;
         const dataset = chart.data.datasets[0];
@@ -3602,6 +3784,21 @@
       renderValueShareList("topProductShareList", shareProducts.map(p => ({ name: displayProductName(p, 28), value: p.gmv, isNew: p.isNew })));
       makeChart("productFunnelChart", { type: "scatter", data: { datasets: currentProducts.map((p, idx) => ({ label: displayProductName(p, 28), data: [{ x: p.gmv, y: p.costRate, name: displayProductName(p, 28), pid: p.pid || p.sku }], backgroundColor: [palette.ink, palette.cyan, palette.rose, palette.green, palette.amber, palette.blue][idx % 6] })) }, options: { ...chartDefaults, plugins: { ...chartDefaults.plugins, legend: { display: false }, tooltip: { ...chartDefaults.plugins.tooltip, callbacks: { title: items => items[0]?.raw?.name || "", label: ctx => [`PID ${ctx.raw.pid}`, `GMV ${fmtMoney(ctx.raw.x)}`, `MKT cost ${ctx.raw.y.toFixed(1)}%`] } } }, scales: { x: { ...chartDefaults.scales.x, title: { display: true, text: "GMV", color: palette.muted }, ticks: { callback: v => fmtMoney(v) } }, y: { ...chartDefaults.scales.y, title: { display: true, text: "Marketing cost %", color: palette.muted }, ticks: { callback: v => `${v}%` } } } } });
       renderValueShareList("productCostQualityList", [...currentProducts].sort((a, b) => a.costRate - b.costRate).slice(0, 8).map(p => ({ name: displayProductName(p, 28), value: p.marketingCost, isNew: p.isNew })));
+      const productStructure = productStructureStats();
+      makeChart("newProductShareChart", { type: "line", data: { labels: productStructure.monthNewShares.map(row => row.label), datasets: [{
+        label: dashboardText("New product GMV share", "新品 GMV 占比"),
+        data: productStructure.monthNewShares.map(row => row.value),
+        borderColor: palette.costTeal,
+        backgroundColor: "rgba(36, 184, 199, .12)",
+        pointBackgroundColor: "#fff",
+        pointBorderColor: palette.costTeal,
+        pointBorderWidth: 3,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        borderWidth: 3,
+        tension: .35,
+        fill: true,
+      }] }, options: { ...chartDefaults, layout: { padding: { top: 20, right: 8 } }, plugins: { ...chartDefaults.plugins, legend: { display: false }, tooltip: { ...chartDefaults.plugins.tooltip, callbacks: { label: ctx => [`New share ${ctx.parsed.y.toFixed(1)}%`, `New GMV ${fmtMoney(productStructure.monthNewShares[ctx.dataIndex]?.gmv || 0)}`] } } }, scales: { x: { ...chartDefaults.scales.x, ticks: { ...chartDefaults.scales.x.ticks, font: { family: "DM Sans", weight: 700 } } }, y: { ...chartDefaults.scales.y, beginAtZero: true, suggestedMax: Math.max(35, Math.ceil(Math.max(...productStructure.monthNewShares.map(row => row.value)) / 5) * 5 + 5), ticks: { ...chartDefaults.scales.y.ticks, callback: v => `${v}%` } } } } });
     }
 
     function renderTables() {
@@ -3634,8 +3831,41 @@
       };
       movementTable(getProducts(realData.fastestGrowth || []).sort((a, b) => Math.abs(b.growthAbs || 0) - Math.abs(a.growthAbs || 0)).slice(0, 10), "fastestGrowthTable");
       movementTable(getProducts(realData.biggestDecliners || []).sort((a, b) => (b.declineAbs || Math.abs(b.growthAbs || 0)) - (a.declineAbs || Math.abs(a.growthAbs || 0))).slice(0, 10), "declinersTable");
-      movementTable(getProducts(realData.productYoYGrowth || []).slice(0, 10), "productYoYGrowthTable");
-      movementTable(getProducts(realData.productYoYDecliners || []).slice(0, 10), "productYoYDeclinersTable");
+      const halfYearLabel = activePeriodKey === "h1" ? "H1" : activePeriodKey === "h2" ? "H2" : null;
+      const yoySection = document.getElementById("productYoySection");
+      if (yoySection) yoySection.style.display = halfYearLabel ? "" : "none";
+      if (halfYearLabel) {
+        const currentYearLabel = `2026 ${halfYearLabel}`;
+        const priorYearLabel = `2025 ${halfYearLabel}`;
+        const yoyGrowthTitle = document.getElementById("productYoyGrowthTitle");
+        const yoyGrowthMeta = document.getElementById("productYoyGrowthMeta");
+        const yoyDeclinersTitle = document.getElementById("productYoyDeclinersTitle");
+        const yoyDeclinersMeta = document.getElementById("productYoyDeclinersMeta");
+        if (yoyGrowthTitle) yoyGrowthTitle.textContent = `YoY Fastest Growth · ${halfYearLabel} PID Level`;
+        if (yoyGrowthMeta) yoyGrowthMeta.textContent = `Top ${halfYearLabel} products ranked by absolute GMV increase versus ${priorYearLabel}, including new products.`;
+        if (yoyDeclinersTitle) yoyDeclinersTitle.textContent = `YoY Biggest Decliners · ${halfYearLabel} PID Level`;
+        if (yoyDeclinersMeta) yoyDeclinersMeta.textContent = `Top ${halfYearLabel} products ranked by absolute GMV decrease versus ${priorYearLabel}.`;
+        document.querySelectorAll(".yoy-table thead tr").forEach(row => {
+          row.innerHTML = `<th>#</th><th>Product / PID</th><th class="num">${priorYearLabel}</th><th class="num">${currentYearLabel}</th><th class="num">GMV Change</th><th class="num">YoY</th>`;
+        });
+        const growthRows = (halfYearLabel === "H2" ? (realData.productYoYGrowthH2 || realData.productYoYGrowth_h2 || []) : (realData.productYoYGrowth || []));
+        const declinerRows = (halfYearLabel === "H2" ? (realData.productYoYDeclinersH2 || realData.productYoYDecliners_h2 || []) : (realData.productYoYDecliners || []));
+        const yoyPeriodTable = (rows, id) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.innerHTML = rows.slice(0, 10).map((p, index) => {
+            const prior = p[`gmv2025${halfYearLabel}`] ?? p.priorGmv ?? p.gmv2025H1 ?? p.gmv2025H2 ?? 0;
+            const current = p[`gmv2026${halfYearLabel}`] ?? p.currentGmv ?? p.gmv2026H1 ?? p.gmv2026H2 ?? p.gmv ?? 0;
+            const abs = p.yoyAbs ?? (current - prior);
+            const isGain = abs >= 0;
+            const isNew = p.isNew || (!prior && current > 0);
+            const yoyCell = isNew ? `<span class="growth-badge up">New</span>` : changeBadge(p.yoyPct ?? pctOf(abs, prior));
+            return `<tr><td>#${index + 1}</td><td>${productNameCell(p)}</td><td class="num">${prior ? `<span class="metric-main">${fmtMoney(prior)}</span><span class="metric-sub">${priorYearLabel}</span>` : "—"}</td><td class="num"><span class="metric-main">${fmtMoney(current)}</span><span class="metric-sub">${currentYearLabel}</span></td><td class="num"><span class="metric-main">${isGain ? "+" : "-"}${fmtMoney(Math.abs(abs))}</span><span class="metric-sub ${isGain ? "good" : "bad"}">YoY GMV ${isGain ? "gain" : "loss"}</span></td><td class="num">${yoyCell}</td></tr>`;
+          }).join("");
+        };
+        yoyPeriodTable(growthRows, "productYoYGrowthTable");
+        yoyPeriodTable(declinerRows, "productYoYDeclinersTable");
+      }
       const costTable = document.getElementById("monthlyCostTable");
       if (costTable) costTable.innerHTML = realData.costStructure.monthly.map(row => `<tr><td>${row.month}</td><td class="num">${fmtMoney(row.gmv)}</td><td class="num">${(row.adActualSpendRatio || 0).toFixed(1)}%</td><td class="num">${(row.commissionRatio || 0).toFixed(1)}%</td><td class="num">${(row.netShippingCostRatio || 0).toFixed(1)}%</td><td class="num">${(row.referralFeesRatio || 0).toFixed(1)}%</td><td class="num">${(row.smartPromotionFeesRatio || 0).toFixed(1)}%</td><td class="num">${(row.campaignServiceFeesRatio || 0).toFixed(1)}%</td><td class="num">${(row.totalCostRatio || 0).toFixed(1)}%</td><td class="num">${row.costRateVsPrior == null ? "—" : changeBadge(row.costRateVsPrior, "pp")}</td><td class="num">${row.gmvYoY == null ? "—" : changeBadge(row.gmvYoY)}</td></tr>`).join("");
       const campaignTable = document.getElementById("campaignTable");
@@ -3668,6 +3898,7 @@
     function renderDashboard() {
       renderKpis();
       renderProductKpis();
+      renderProductStructure();
       renderAffiliateKpis();
       renderLiveKpis();
       renderCharts();
